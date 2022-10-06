@@ -1,22 +1,44 @@
-import { Button } from "@mui/material"
-import { FotoStyled, ItemListaStyled, ListaStyled, InformacoesStyled, NomeStyled, ValorStyled, DesricaoStyled } from "./ListaProfessores.style"
+import { Button } from "@mui/material";
+import { Professor } from "../../@types/professor";
+import {
+  FotoStyled,
+  ItemListaStyled,
+  ListaStyled,
+  InformacoesStyled,
+  NomeStyled,
+  ValorStyled,
+  DesricaoStyled,
+  ListaVaziaStyled,
+} from "./ListaProfessores.style";
 
-const ListaProfessores = () => {
-  return (
-    <>
-      <ListaStyled>
-        <ItemListaStyled>
-          <FotoStyled src="https://github.com/aluiziocatao.png"></FotoStyled>
-          <InformacoesStyled>
-            <NomeStyled>Aluízio Catão</NomeStyled>
-            <ValorStyled>R$ 100,00 por hora</ValorStyled>
-            <DesricaoStyled>Aulas de programação</DesricaoStyled>
-            <Button>Marcar Aula</Button>
-          </InformacoesStyled>
-        </ItemListaStyled>
-      </ListaStyled>
-    </>
-  )
+interface ListaProfessoresProps {
+  professores: Professor[];
 }
 
-export default ListaProfessores
+const ListaProfessores = (props: ListaProfessoresProps) => {
+  return (
+    <div>
+      {props.professores.length > 0 ? (
+        <ListaStyled>
+          {props.professores.map((professor) => (
+            <ItemListaStyled key={professor.id}>
+              <FotoStyled src={professor.foto}></FotoStyled>
+              <InformacoesStyled>
+                <NomeStyled>{professor.nome}</NomeStyled>
+                <ValorStyled>{professor.valor_hora.toLocaleString('pt-BR', { minimumFractionDigits: 2, style: 'currency', currency: 'BRL' })} por hora</ValorStyled>
+                <DesricaoStyled>{professor.descricao}</DesricaoStyled>
+                <Button sx={{ width: "70%" }}>
+                  Marcar Aula com {professor.nome}
+                </Button>
+              </InformacoesStyled>
+            </ItemListaStyled>
+          ))}
+        </ListaStyled>
+      ): (
+        <ListaVaziaStyled>Nenhum item encontrado</ListaVaziaStyled>
+      )}
+    </div>
+  );
+};
+
+export default ListaProfessores;
